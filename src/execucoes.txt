@@ -1,0 +1,9 @@
+primeiro bom resultado
+./identification 111 100000 28 40 40 0.5 0.015 2> oct
+
+outro bom resultado
+./identification 111 100000 28 400 40 0.5 0.004 2> oct
+
+com janela deslizante agora
+./identification 11 1000 28 10 40 .5 0.004 50 2>oct
+./identification 11 2000 28 10 40 .25 0.002 50 2>oct
