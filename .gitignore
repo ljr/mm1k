@@ -1,3 +1,6 @@
 *.o
+*.out
 identification
 test_window
+sinewave
+a.out

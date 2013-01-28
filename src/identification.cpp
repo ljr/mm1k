@@ -36,7 +36,6 @@ void RlsSrvr();
 //int nreq;
 double deadline;
 int req = 1;
-double change_number = 0.0; // double: to rule the sine wave
 double arrival_rate;
 
 // metrics
@@ -47,36 +46,36 @@ double last_utilization = .0;
 Window *response_time; 
 int response_time_size;
 double mean_service;
-// http://stackoverflow.com/questions/10209935/drawing-sine-wave-using-opencv
-int mean_sin_wave;
-float bound_sin_wave;
-float bound_rate;
-float freq_sin_wave;
+float mean_sin_wave;
+float amplitude;
+int changes_in_wave_period;
+float b = 0.0;
+float step;
 Window *utilization;
 
 
 int main(int argc, char *argv[])
 {
-	if (argc != 10) {
-		cout << "Usage:\n\t" <<  argv[0] << " seed n_requests(simtime) mean_service sample_time mean_sin_wave bound_rate freq_sin_wave rt_window_size change_arrival_rate" << endl;
-		cout << "Example:\n\t" <<  argv[0] << " 1010 2000 28 300 40 .05 0.002 10 100" << endl;
+	if (argc != 9) {
+		cout << "Usage:\n\t" <<  argv[0] << " 1seed 2n_requests(simtime) 3mean_service 4sample_time 5mean_sin_wave 6amplitude 7changes_in_wave_period 8rt_window_size" << endl;
+		cout << "Example:\n\t" <<  argv[0] << " 1010 2000 28 300 40 .05 42 10" << endl;
 		return 1;
 	}
 
 	s = atol(argv[1]);
 //	nreq = atoi(argv[2]);
 	deadline = atof(argv[2]);
-	mean_service = atoi(argv[3]);
+	mean_service = atof(argv[3]);
 	sample_time = atof(argv[4]);
-	mean_sin_wave = atoi(argv[5]);
+	mean_sin_wave = atof(argv[5]);
 	arrival_rate = mean_sin_wave;
-	bound_rate = atof(argv[6]);
-	bound_sin_wave = mean_sin_wave * bound_rate;
-	freq_sin_wave = atof(argv[7]);
+	amplitude = mean_sin_wave * atof(argv[6]);
+	changes_in_wave_period = atoi(argv[7]);
+	step = (2*M_PI) / (float) changes_in_wave_period;
+	change_arrival_rate = 21000 / (float) changes_in_wave_period;
 	response_time_size = atoi(argv[8]);
 	response_time = new Window(response_time_size);
 	utilization = new Window(response_time_size); // TODO: SHOULD CREATE A SPECIFIC PARAMETER FOR THIS? I THINK NOT.
-	change_arrival_rate = atof(argv[9]);
 
 	new Future(LINKED);
 	fqueue = new Facility("queue");
@@ -148,9 +147,8 @@ void ChangeArrival()
 	Future::UpdateArrivals();
 	Future::Schedule(CHANGE_MEAN_ARRIVAL, change_arrival_rate, change);
 
-
-	change_number += freq_sin_wave;
-	arrival_rate = mean_sin_wave + bound_sin_wave * sin(freq_sin_wave*M_PI);
+	arrival_rate = mean_sin_wave + amplitude * sin(b);
+	b += step;
 }
 
 void Arrive()
