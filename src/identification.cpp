@@ -9,10 +9,12 @@
 Facility * fqueue = NULL;
 enum EventId {
 	CHANGE_MEAN_ARRIVAL,
+	SAMPLING,
 	ARRIVAL, 
 	REQUEST_SERVER, 
 	RELEASE_SERVER
 };
+long s; // seed
 
 // payload to the token
 struct Payload {
@@ -21,19 +23,17 @@ struct Payload {
 struct Payload *new_payload(double arrival);
 
 
-// command line parameters
-long s;
-int nreq;
-double mean_service;
-
 // event functions
+void Sampling();
 void ChangeArrival();
 void Arrive();
 void RqstSrvr();
 void RlsSrvr();
 
 // flow control
-bool done = false;
+//bool done = false;
+//int nreq;
+double deadline;
 int req = 1;
 double change_number = 0.0; // double: to rule the sine wave
 double arrival_rate;
@@ -41,9 +41,10 @@ double arrival_rate;
 // metrics
 double sample_time; // double: to pass to Future::Schedule
 double last_response_time;
-double last_utilization;
+double last_utilization = .0;
 Window *response_time; 
 int response_time_size;
+double mean_service;
 // http://stackoverflow.com/questions/10209935/drawing-sine-wave-using-opencv
 int mean_sin_wave;
 float bound_sin_wave;
@@ -54,11 +55,15 @@ Window *utilization;
 
 int main(int argc, char *argv[])
 {
-
-	cout << "Usage:\n\t" <<  argv[0] << " seed n_requests mean_service sample_time mean_sin_wave bound_rate freq_sin_wave rt_window_size" << endl;
+	if (argc != 9) {
+		cout << "Usage:\n\t" <<  argv[0] << " seed n_requests(simtime) mean_service sample_time mean_sin_wave bound_rate freq_sin_wave rt_window_size" << endl;
+		cout << "Example:\n\t" <<  argv[0] << " seed 2000 168 sample_time mean_sin_wave bound_rate freq_sin_wave rt_window_size" << endl;
+		return 1;
+	}
 
 	s = atol(argv[1]);
-	nreq = atoi(argv[2]);
+//	nreq = atoi(argv[2]);
+	deadline = atof(argv[2]);
 	mean_service = atoi(argv[3]);
 	sample_time = atof(argv[4]);
 	mean_sin_wave = atoi(argv[5]);
@@ -76,13 +81,18 @@ int main(int argc, char *argv[])
 	stream(1);
 	seed(s, 1);
 
-	Token customer(1, new_payload(0.0)), change(0);
+	Token customer(1, new_payload(0.0)), change(0), sample(0);
 	Future::Schedule(ARRIVAL, 0.0, customer);
 	Future::Schedule(CHANGE_MEAN_ARRIVAL, sample_time, change);
+	Future::Schedule(SAMPLING, sample_time, change);
 
-	while (!done) {
+//	while (!done) {
+	while (Future::SimTime() < deadline) {
 		Estatus es = Future::NextEvent();
 		switch (es.event_id) {
+			case SAMPLING:
+				Sampling();
+				break;
 			case CHANGE_MEAN_ARRIVAL:
 				ChangeArrival();
 				break;
@@ -101,29 +111,33 @@ int main(int argc, char *argv[])
 	}
 
 
-
-
 	Future::ReportStats();
 	delete utilization, response_time;
 	return 0;
 }
 
+void Sampling()
+{
+	Token sample = Future::CurrentToken();
+	Future::UpdateArrivals();
+	Future::Schedule(SAMPLING, sample_time, sample);
+
+	// sample utilization
+	utilization->insertValue(Future::getUtilization());
+	last_utilization = Future::getUtilization();
+//	cerr << change_number << DELIM << arrival_rate << DELIM << Future::getUtilization() << DELIM << last_response_time << endl;
+	cerr << Future::SimTime() << DELIM << arrival_rate << DELIM << last_response_time << DELIM << response_time->getMean() << DELIM << last_utilization << DELIM << utilization->getMean() << DELIM << endl;
+}
 
 void ChangeArrival()
 {
 	Token change = Future::CurrentToken();
 	Future::UpdateArrivals();
+	Future::Schedule(CHANGE_MEAN_ARRIVAL, sample_time, change);
 
-//	cerr << change_number << DELIM << arrival_rate << DELIM << Future::getUtilization() << DELIM << last_response_time << endl;
 
 	change_number++;
 	arrival_rate = mean_sin_wave + bound_sin_wave * sin(freq_sin_wave*M_PI*change_number);
-
-	Future::Schedule(CHANGE_MEAN_ARRIVAL, sample_time, change);
-
-	// sample utilization
-	utilization->insertValue(Future::getUtilization());
-	last_utilization = Future::getUtilization();
 }
 
 void Arrive()
@@ -133,12 +147,12 @@ void Arrive()
 
 	Future::Schedule(REQUEST_SERVER, 0.0, customer);
 
-	if (req < nreq) {
-		customer.Id(customer.Id() + 1);
-		customer.SetPbox(new_payload(Future::SimTime()));
-		Future::Schedule(ARRIVAL, arrival_rate, customer);
-		req++;
-	}
+//	if (req < nreq) { // XXX: now for a period of time.
+	customer.Id(customer.Id() + 1);
+	customer.SetPbox(new_payload(Future::SimTime()));
+	Future::Schedule(ARRIVAL, arrival_rate, customer);
+//		req++;
+//	}
 }
 
 void RqstSrvr()
@@ -159,10 +173,7 @@ void RlsSrvr()
 	last_response_time = Future::SimTime() - pl->arrival_time;
 	response_time->insertValue(last_response_time);
 
-	// aperiodic metric collecting. For periodic see: ChangeArrival
-	cerr << Future::SimTime() << DELIM << arrival_rate << DELIM << last_response_time << DELIM << response_time->getMean() << DELIM << last_utilization << DELIM << utilization->getMean() << DELIM << who << endl;
-
-        done = who == nreq;
+//      done = who == nreq;
         fqueue->Release(who);
         Future::UpdateDepartures();
 }
