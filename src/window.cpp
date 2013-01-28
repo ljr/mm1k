@@ -3,6 +3,7 @@
 
 Window::Window(int size)
 {
+	this->sum = 0;
 	setSize(size);
 }
 
