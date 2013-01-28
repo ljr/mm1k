@@ -13,7 +13,7 @@ CPPFLAGS = -lm -I$(INCLUDE)
 
 all: $(PROG)
 
-$(PROG):
+$(PROG): $(OBJ)
 	$(CPP) $(CPPFLAGS) -o $(PROG) $(SRC) $(LIB)
 
 clean: 

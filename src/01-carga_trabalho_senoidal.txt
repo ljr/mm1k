@@ -1,9 +1,4 @@
 ./identification 113754 72000 38 10 40 .0125 42 10 2>t.out
 t=csvread ("t.out");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
 
-131         cerr
-132                         << Future::SimTime()
-133                         << DELIM << arrival_rate
-134                         << DELIM << last_utilization
-135                         << endl;
 

@@ -3,5 +3,7 @@
 identification
 test_window
 sinewave
-./event/lib/simpack.a
+/event/lib/simpack.a
+src/results/
+src/t.oct
 a.out

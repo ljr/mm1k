@@ -49,6 +49,7 @@ double mean_service;
 float mean_sin_wave;
 float amplitude;
 int changes_in_wave_period;
+float sine_wave_period;
 float b = 0.0;
 float step;
 Window *utilization;
@@ -56,9 +57,10 @@ Window *utilization;
 
 int main(int argc, char *argv[])
 {
-	if (argc != 9) {
-		cout << "Usage:\n\t" <<  argv[0] << " 1seed 2n_requests(simtime) 3mean_service 4sample_time 5mean_sin_wave 6amplitude 7changes_in_wave_period 8rt_window_size" << endl;
-		cout << "Example:\n\t" <<  argv[0] << " 1010 2000 28 300 40 .05 42 10" << endl;
+	if (argc != 10) {
+		cout << "Usage:\n\t" <<  argv[0] << " 1seed 2n_requests(simtime) 3mean_service 4sample_time 5mean_sin_wave 6amplitude 7changes_in_wave_period 8rt_window_size 9sine_wave_period" << endl;
+		cout << "Example:\n\t" <<  argv[0] << " 1010 72000 28 300 40 .05 42 10 2100" << endl;
+		cout << "Passed " << argc << " arguments." << endl;
 		return 1;
 	}
 
@@ -72,10 +74,11 @@ int main(int argc, char *argv[])
 	amplitude = mean_sin_wave * atof(argv[6]);
 	changes_in_wave_period = atoi(argv[7]);
 	step = (2*M_PI) / (float) changes_in_wave_period;
-	change_arrival_rate = 21000 / (float) changes_in_wave_period;
 	response_time_size = atoi(argv[8]);
 	response_time = new Window(response_time_size);
 	utilization = new Window(response_time_size); // TODO: SHOULD CREATE A SPECIFIC PARAMETER FOR THIS? I THINK NOT.
+	sine_wave_period = atof(argv[9]);
+	change_arrival_rate = sine_wave_period / (float) changes_in_wave_period;
 
 	new Future(LINKED);
 	fqueue = new Facility("queue");
@@ -84,8 +87,8 @@ int main(int argc, char *argv[])
 	seed(s, 1);
 
 	Token customer(1, new_payload(0.0)), change(0), sample(0);
-	Future::Schedule(SAMPLING, 0.0, sample);
 	Future::Schedule(ARRIVAL, 0.0, customer);
+	Future::Schedule(SAMPLING, sample_time, sample);
 	Future::Schedule(CHANGE_MEAN_ARRIVAL, change_arrival_rate, change);
 
 //	while (!done) {
@@ -131,7 +134,8 @@ void Sampling()
 	cerr 
 			<< Future::SimTime()
 			<< DELIM << arrival_rate 
-			<< DELIM << last_utilization
+			<< DELIM << last_response_time
+			<< DELIM << response_time->getMean()
 			<< endl;
 }
 
