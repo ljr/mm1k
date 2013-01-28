@@ -3,4 +3,5 @@
 identification
 test_window
 sinewave
+./event/lib/simpack.a
 a.out

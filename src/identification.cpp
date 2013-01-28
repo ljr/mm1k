@@ -131,13 +131,7 @@ void Sampling()
 	cerr 
 			<< Future::SimTime()
 			<< DELIM << arrival_rate 
-/*
-			<< DELIM << arrival_rate
-			<< DELIM << last_response_time 
-			<< DELIM << response_time->getMean() 
 			<< DELIM << last_utilization
-			<< DELIM << utilization->getMean() 
-*/
 			<< endl;
 }
 
