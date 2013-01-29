@@ -1,8 +1,9 @@
 *.o
 *.out
-identification
-test_window
-sinewave
+src/identification
+src/test_window
+src/sinewave
+src/test
 /event/lib/simpack.a
 src/results/
 src/t.oct

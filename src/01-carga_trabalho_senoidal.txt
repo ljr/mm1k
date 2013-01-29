@@ -1,4 +1,0 @@
-./identification 113754 72000 38 10 40 .0125 42 10 2>t.out
-t=csvread ("t.out");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-
-

@@ -48,7 +48,14 @@ rm -Rf results/
 cp t.oct 02-results/r-29_38.csv
 
 
-t=csvread ("t.oct");plot(t(:,3),t(:,2),'.')
+t=csvread("02-results/r-29_38.csv");plot(t(:,3),t(:,2),'.')
+para o 29-38: (executar comandos do arx.m
+	a   0.97571
+	b  -0.64736
+	rmse =  4.9899
+	r2 =  0.99624
+
+mm1=tf(-0.64736,[1 0.97571], 300)
 
 
 
