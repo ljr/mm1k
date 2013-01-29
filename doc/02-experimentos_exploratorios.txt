@@ -8,7 +8,7 @@ seguintes experimentos:
 		Alterações de carga no período: 42
 	Tamanho médio das requisições: 28
 	Tempo de amostragem: 300
-* Fato: tempo entre as chegadas
+* Fator: tempo entre as chegadas
 	Níveis:
 
 29-33:  4 -> 2.0 + 29 = 31.0, 0.0645

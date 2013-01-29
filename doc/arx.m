@@ -11,10 +11,6 @@ u38=v38./u;
 v50=[]; for i = 1:100; v50 = [v50 5.0]; endfor
 u50=v50./u;
 plot(u,u2,u,u3,u,u35,u,u38,u,u50)
-# escolher v38
-#    0~0.2 linear
-#    0~0.4 almost linear
-#    0~1.5 nonlinear
 
 
 
@@ -22,12 +18,12 @@ out=dlmread ("identification.csv" ,";")
 run("/usr/share/octave/packages/control-2.4.1/@lti/dcgain.m")
 
 
-out=csvread("oct")
+t=csvread("oct")
 
-yp=out(:,4);
+yp=t(:,2);
 size(yp)
 
-up=out(:,2);
+up=t(:,3);
 size(up)
 
 mu = mean(up(1:end-1))
@@ -41,22 +37,18 @@ H = [y(1:end-1) u(1:end-1)];
 size(H)
 size(y(2:end))
 
-t = H\y(2:end)
-# t =
-#
-#a->   9.9141e-01
-#b->  -7.4134e-05
+T = H\y(2:end)
 
 
-yhat = t(1)*y(1:end-1) + t(2)*u(1:end-1);
+yhat = T(1)*y(1:end-1) + T(2)*u(1:end-1);
 plotyy(out(:,1),out(:,2),out(:,1),out(:,4))
 plot(y(2:end),yhat, ' * ',y,y,' -')
 
 
-rmse=sqrt(sum(power(y(2:end) - yhat, 2))/size(yhat)(1));
+rmse=sqrt(sum(power(y(2:end) - yhat, 2))/size(yhat)(1))
 r2=1-(var(y(2:end)-yhat)/var(y(2:end)))
 
-mm1=tf(t(2),[1 t(1)], 40)
+mm1=tf(T(2),[1 T(1)], 300)
 impulse(mm1,2000)
 step(mm1,2000)
 

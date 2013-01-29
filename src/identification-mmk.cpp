@@ -22,6 +22,9 @@ struct Payload {
 	double arrival_time; // simulation time token arrives
 };
 struct Payload *new_payload(double arrival);
+int max_buffer_size = 700000;
+int buffer_size = 0;
+
 
 
 // event functions
@@ -93,6 +96,9 @@ int main(int argc, char *argv[])
 
 //	while (!done) {
 	while (Future::SimTime() < deadline) {
+		if (buffer_size < 0) {
+			cout << "!!!!!!!!!!!!!!! PROBLEM HERE !!!!!!!!!!!!!!!!!!" << endl;
+		}
 		Estatus es = Future::NextEvent();
 		switch (es.event_id) {
 			case SAMPLING:
@@ -102,13 +108,17 @@ int main(int argc, char *argv[])
 				ChangeArrival();
 				break;
 			case ARRIVAL:
-				Arrive();
+				if (buffer_size < max_buffer_size) {
+					Arrive();
+					buffer_size++;
+				}
 				break;
 			case REQUEST_SERVER:
 				RqstSrvr();
 				break;
 			case RELEASE_SERVER:
 				RlsSrvr();
+				buffer_size--;
 				break;
 			default:
 				ErrXit(1, "bad event_id");
