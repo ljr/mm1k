@@ -21,15 +21,15 @@ rm -Rf 02-results
 mkdir 02-results -p
 
 rm -Rf results/
-./run.sh 300000 28 300 30.5 .0491 10000 150 87500
+./run.sh 300000 28 300 30.5 .0491 10000 1 87500
 cp t.oct 02-results/r-29_32.csv
 
 rm -Rf results/
-./run.sh 300000 28 300 34.0 .1470 10000 150 87500
+./run.sh 300000 28 300 34.0 .1470 10000 1 87500
 cp t.oct 02-results/r-29_35.csv
 
 rm -Rf results/
-./run.sh 300000 28 300 35 .1714 10000 150 87500
+./run.sh 300000 28 300 35 .1714 10000 1 87500
 cp t.oct 02-results/r-29_41.csv
 
 t=csvread ("02-results/r-29_32.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
@@ -41,7 +41,7 @@ print -color -deps 04-exp_r-29_41.eps
 
 # faixa ruim de valores...
 rm -Rf results/
-./run.sh 300000 28 300 30.5 .0491 42 150 87500
+./run.sh 300000 28 300 30.5 .0491 42 1 87500
 cp t.oct 02-results/r-29_32-42.csv
 t=csvread ("02-results/r-29_32-42.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
 print -color -deps 04-exp_r-29_32-42.eps

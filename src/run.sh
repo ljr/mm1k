@@ -13,16 +13,12 @@ MEAN_SERVICE=$2
 mkdir $RESULTS -p
 
 function run {
-	i=0
-	for s in $(cat seeds.txt)
+	mapfile -t s1 < seeds1.txt
+	mapfile -t s2 < seeds2.txt
+	for i in $(seq 0 $((NUMBER_OF_REPLICAS-1)))
 	do
 		echo -e "\n\n\t >>>>>>>>>>>>>>> Running replica $i >>>>>>>>>>>>>>> \n\n\n"
-		$PROG $s $1 $2 $3 $4 $5 $6 $7 $8 2>./$RESULTS/out_$MEAN_ARRIVAL-$MEAN_SERVICE-r$i.csv
-		i=$((i+1))
-		if (($i == $NUMBER_OF_REPLICAS))
-		then
-			break
-		fi
+		$PROG ${s1[$i]} ${s2[$i]} $1 $2 $3 $4 $5 $6 $7 $8 2>./$RESULTS/out_$MEAN_ARRIVAL-$MEAN_SERVICE-r$i.csv
 	done
 }
 

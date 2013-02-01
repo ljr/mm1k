@@ -15,7 +15,7 @@ enum EventId {
 	REQUEST_SERVER, 
 	RELEASE_SERVER
 };
-long s; // seed
+long s1, s2; // seed
 
 // payload to the token
 struct Payload {
@@ -32,8 +32,6 @@ void RqstSrvr();
 void RlsSrvr();
 
 // flow control
-//bool done = false;
-//int nreq;
 double deadline;
 int req = 1;
 double arrival_rate;
@@ -57,34 +55,34 @@ Window *utilization;
 
 int main(int argc, char *argv[])
 {
-	if (argc != 10) {
-		cout << "Usage:\n\t" <<  argv[0] << " 1seed 2n_requests(simtime) 3mean_service 4sample_time 5mean_sin_wave 6amplitude 7changes_in_wave_period 8rt_window_size 9sine_wave_period" << endl;
-		cout << "Example:\n\t" <<  argv[0] << " 1010 72000 28 300 40 .05 42 10 2100" << endl;
+	if (argc != 11) {
+		cout << "Usage:\n\t" <<  argv[0] << " 1seed 2seed 3n_requests(simtime) 4mean_service 5sample_time 6mean_sin_wave 7amplitude 8changes_in_wave_period 9rt_window_size 10sine_wave_period" << endl;
+		cout << "Example:\n\t" <<  argv[0] << " 10 10 72000 28 300 40 .05 42 10 2100" << endl;
 		cout << "Passed " << argc << " arguments." << endl;
 		return 1;
 	}
 
-	s = atol(argv[1]);
-//	nreq = atoi(argv[2]);
-	deadline = atof(argv[2]);
-	mean_service = atof(argv[3]);
-	sample_time = atof(argv[4]);
-	mean_sin_wave = atof(argv[5]);
+	s1 = atol(argv[1]);
+	s2 = atol(argv[2]);
+	deadline = atof(argv[3]);
+	mean_service = atof(argv[4]);
+	sample_time = atof(argv[5]);
+	mean_sin_wave = atof(argv[6]);
 	arrival_rate = mean_sin_wave;
-	amplitude = mean_sin_wave * atof(argv[6]);
-	changes_in_wave_period = atoi(argv[7]);
+	amplitude = mean_sin_wave * atof(argv[7]);
+	changes_in_wave_period = atoi(argv[8]);
 	step = (2*M_PI) / (float) changes_in_wave_period;
-	response_time_size = atoi(argv[8]);
+	response_time_size = atoi(argv[9]);
 	response_time = new Window(response_time_size);
 	utilization = new Window(response_time_size); // TODO: SHOULD CREATE A SPECIFIC PARAMETER FOR THIS? I THINK NOT.
-	sine_wave_period = atof(argv[9]);
+	sine_wave_period = atof(argv[10]);
 	change_arrival_rate = sine_wave_period / (float) changes_in_wave_period;
 
 	new Future(LINKED);
 	fqueue = new Facility("queue");
 
-	stream(1);
-	seed(s, 1);
+	seed(s1, 1);
+	seed(s2, 2);
 
 	Token customer(1, new_payload(0.0)), change(0), sample(0);
 	Future::Schedule(ARRIVAL, 0.0, customer);
@@ -159,6 +157,7 @@ void Arrive()
 //	if (req < nreq) { // XXX: now for a period of time.
 	customer.Id(customer.Id() + 1);
 	customer.SetPbox(new_payload(Future::SimTime()));
+	stream(1);
 	Future::Schedule(ARRIVAL, expntl(arrival_rate), customer);
 //		req++;
 //	}
@@ -168,6 +167,7 @@ void RqstSrvr()
 {
 	Token customer = Future::CurrentToken();
 	if (fqueue->Request(customer) == FREE) {
+		stream(2);
 		double service_time = expntl(mean_service);
 		Future::Schedule(RELEASE_SERVER, service_time, customer);
 	}

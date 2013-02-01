@@ -39,14 +39,21 @@ r2=1-(var(y(2:end)-yhat)/var(y(2:end)))
 
 plot(y(2:end),yhat, ' * ',y,y,' -')
 
+
 print -color -deps 04-coef_29_32.eps
-a 0.96486 b -4.87183
+mu =  30.632 my =  371.94
+a 0.96487 b -4.34423
+rmse =  7.3648 r2 =  0.99617
 
 print -color -deps 04-coef_29_35.eps
-a 0.97072 b -1.16624
+mu =  34.440 my =  233.11
+a 0.97163 b -1.14608
+rmse =  6.8379 r2 =  0.99740 
 
 print -color -deps 04-coef_29_41.eps
-a 0.97395 b -0.87718
+mu =  35.528 my =  219.43
+a 0.97627 b -0.80957
+rmse =  7.2492 r2 =  0.99712
 
 
 

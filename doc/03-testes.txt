@@ -3,32 +3,32 @@
 
 
 rm -Rf results/
-./run-test.sh 300000 28 300 30.632 150 100000 -2
+./run-test.sh 300000 28 300 30.632 1 100000 -2
 rm -Rf results/
-./run-test.sh 300000 28 300 34.44 150 100000 -2  
+./run-test.sh 300000 28 300 34.44 1 100000 -4.718
 rm -Rf results/
-./run-test.sh 300000 28 300 35.528 150 100000 -2 
+./run-test.sh 300000 28 300 35.528 1 100000 -2 
 
 
-t30=csvread("03-test/rtest-30-28.csv");
-T30 = [0.96486 -4.87183];
+t30=csvread("03-test/rtest-30.632-28.csv");
+T30 = [0.96487 -4.34423];
 TF30=tf(T30(2),[1 T30(1)], 300)
 [y30 tt30 x30] = step(TF30*-2,200000);
 [x,h1,h2] = plotyy(tt30.+100000,y30,t30(:,1),t30(:,3:4));
 print -color -deps 05-test-30.eps
 
 
-t34=csvread("03-test/rtest-34-28.csv");
-T34 = [0.97072 -1.16624];
+t34=csvread("03-test/rtest-34.44-28.csv");
+T34 = [0.97163 -1.14608];
 TF34=tf(T34(2),[1 T34(1)], 300)
-[y34 tt34 x34] = step(TF34*-2,200000);
+[y34 tt34 x34] = step(TF34*-4.718,200000);
 [x,h1,h2] = plotyy(tt34.+100000,y34,t34(:,1),t34(:,3:4));
 print -color -deps 05-test-34.eps
 
 
 
-t35=csvread("03-test/rtest-35-28.csv");
-T35 = [0.97395 -0.87718];
+t35=csvread("03-test/rtest-35.528-28.csv");
+T35 = [0.97627 -0.80957];
 TF35=tf(T35(2),[1 T35(1)], 300)
 [y35 tt35 x35] = step(TF35*-2,200000);
 [x,h1,h2] = plotyy(tt35.+100000,y35,t35(:,1),t35(:,3:4));
