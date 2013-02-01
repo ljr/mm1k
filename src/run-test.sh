@@ -39,6 +39,7 @@ function merge {
 	octave -q run_mean.m
 	cut -d ',' -f 1,2 $RESULTS/out_$MEAN_ARRIVAL-$MEAN_SERVICE-r0.csv | join -t ',' $RESULTS/out-mean.csv - > t.oct 
 
+	cp t.oct 03-test/rtest-$MEAN_ARRIVAL-$MEAN_SERVICE.csv
 }
 
 
