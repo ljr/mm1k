@@ -45,12 +45,19 @@ cp t.oct 01-results/r-95_9000.csv
 Observando-se os resultados para carga de trabalho de 95% e tempo de amostragem
 300 segundos, a variável de resposta seguiu sua alterção.
 
-t=csvread ("01-results/r-70_300.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("01-results/r-70_1200.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("01-results/r-70_9000.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("01-results/r-95_300.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("01-results/r-95_1200.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("01-results/r-95_9000.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
+t=csvread ("01-results/r-70_300.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
+print -color -deps r-70_300.eps
+t712=csvread ("01-results/r-70_1200.csv");plotyy(t712(:,1),t712(:,3:4),t(:,1),t(:,5))
+print -color -deps r-70_1200.eps
+t79=csvread ("01-results/r-70_9000.csv");plotyy(t79(:,1),t79(:,3:4),t(:,1),t(:,5))
+print -color -deps r-70_9000.eps
+
+t=csvread ("01-results/r-95_300.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
+print -color -deps r-95_300.eps
+t912=csvread ("01-results/r-95_1200.csv");plotyy(t912(:,1),t912(:,3:4),t(:,1),t(:,5))
+print -color -deps r-95_1200.eps
+t99=csvread ("01-results/r-95_9000.csv");plotyy(t99(:,1),t99(:,3:4),t(:,1),t(:,5))
+print -color -deps r-95_9000.eps
 
 Portanto, o tempo de amostragem para este sistema é de 300 segundos.
 

@@ -11,9 +11,9 @@ seguintes experimentos:
 * Fator: tempo entre as chegadas
 	Níveis:
 
-29-33:  4 -> 2.0 + 29 = 31.0, 0.0645
-29-38:  9 -> 4.5 + 29 = 33.5, 0.1343
-29-48: 19 -> 9.5 + 29 = 38.5, 0.2467
+29-32:  4 -> 1.5 + 29 = 30.5, 0.0491
+29-35:  6 -> 3.0 + 29 = 34.0, 0.1470
+29-41: 12 -> 6.0 + 29 = 35.0, 0.1714
 
 
 rm -Rf 02-results
@@ -21,34 +21,43 @@ rm -Rf 02-results
 mkdir 02-results -p
 
 rm -Rf results/
-./run.sh 300000 28 300 31 .0645 10000 150 87500
-cp t.oct 02-results/r-29_33.csv
+./run.sh 300000 28 300 30.5 .0491 10000 150 87500
+cp t.oct 02-results/r-29_32.csv
 
 rm -Rf results/
-./run.sh 300000 28 300 33.5 .1343 10000 150 87500
-cp t.oct 02-results/r-29_38.csv
+./run.sh 300000 28 300 34.0 .1470 10000 150 87500
+cp t.oct 02-results/r-29_35.csv
 
 rm -Rf results/
-./run.sh 300000 28 300 38.5 .2467 10000 150 87500
-cp t.oct 02-results/r-29_48.csv
+./run.sh 300000 28 300 35 .1714 10000 150 87500
+cp t.oct 02-results/r-29_41.csv
 
-t=csvread ("02-results/r-29_33.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("02-results/r-29_38.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("02-results/r-29_48.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
+t=csvread ("02-results/r-29_32.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
+print -color -deps 04-exp_r-29_32.eps
+t=csvread ("02-results/r-29_35.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
+print -color -deps 04-exp_r-29_35.eps
+t=csvread ("02-results/r-29_41.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
+print -color -deps 04-exp_r-29_41.eps
 
 # faixa ruim de valores...
-t=csvread ("02-results/r-29_33-change-42.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("02-results/r-29_38-change-42.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-t=csvread ("02-results/r-29_48-change-42.csv");plotyy(t(:,1),t(:,2),t(:,1),t(:,3))
-
-
-
 rm -Rf results/
-./run.sh 300000 28 300 33.5 .1343 10000 150 87500
-cp t.oct 02-results/r-29_38.csv
+./run.sh 300000 28 300 30.5 .0491 42 150 87500
+cp t.oct 02-results/r-29_32-42.csv
+t=csvread ("02-results/r-29_32-42.csv");plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5))
+print -color -deps 04-exp_r-29_32-42.eps
+
+clf
+t=csvread("02-results/r-29_32.csv");plot(t(:,5),t(:,2),'.')
+print -color -deps 04-exp_range-r-29_32.eps
+t=csvread("02-results/r-29_35.csv");plot(t(:,5),t(:,2),'.')
+print -color -deps 04-exp_range-r-29_35.eps
+t=csvread("02-results/r-29_41.csv");plot(t(:,5),t(:,2),'.')
+print -color -deps 04-exp_range-r-29_41.eps
+t=csvread("02-results/r-29_32-42.csv");plot(t(:,5),t(:,2),'.')
+print -color -deps 04-exp_range-r-29_32-42.eps
 
 
-t=csvread("02-results/r-29_38.csv");plot(t(:,3),t(:,2),'.')
+
 para o 29-38: (executar comandos do arx.m
 	a   0.97571
 	b  -0.64736

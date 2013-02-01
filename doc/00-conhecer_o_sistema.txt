@@ -18,29 +18,33 @@ Parâmetro: (explorar e escolher uma)
 Plotar o comportamento estacionário do sistema:
 
 
-mu20=21:120;
-mu30=31:130;
-mu35=36:135;
-mu38=39:138;
+l20=21:.2:80;
+l28=29:.2:80;
+l30=31:.2:80;
+l35=36:.2:80;
+l38=39:.2:80;
 
-l20=repmat(20,1,100);
-l30=repmat(30,1,100);
-l35=repmat(35,1,100);
-l38=repmat(38,1,100);
+mu20=repmat(20,1,size(l20)(2));
+mu28=repmat(28,1,size(l28)(2));
+mu30=repmat(30,1,size(l30)(2));
+mu35=repmat(35,1,size(l35)(2));
+mu38=repmat(38,1,size(l38)(2));
 
 ## tempo de resposta médio, independente da política de escalonamento.
-mr20=1./(mu20-l20);
-mr30=1./(mu30-l30);
-mr35=1./(mu35-l35);
-mr38=1./(mu38-l38);
-plot(mu20,r20,'.',mu30,r30,'-',mu35,r35,'+',mu38,r38,'x');
+mr20=(mu20)./(1.-(mu20./l20));
+mr28=(mu28)./(1.-(mu28./l28));
+mr30=(mu30)./(1.-(mu30./l30));
+mr35=(mu35)./(1.-(mu35./l35));
+mr38=(mu38)./(1.-(mu38./l38));
+plot(l20,mr20,'.',l28,mr28,'-',l30,mr30,'*',l35,mr35,'+',l38,mr38,'x');
+print -color -deps foo.eps
 
 ## tempo de resposta considerando FIFO e t=1 (TODO: fazer gráfico 3D)
-ur20=(mu20-l20).*e.^-(mu20-l20);
-ur30=(mu30-l30).*e.^-(mu30-l30);
-ur35=(mu35-l35).*e.^-(mu35-l35);
-ur38=(mu38-l38).*e.^-(mu38-l38);
-plot(mu20,ur20,'.',mu30,ur30,'-',mu35,ur35,'+',mu38,ur38,'x');
+ur20=(l20-mu20).*e.^-(l20-mu20);
+ur30=(l30-mu30).*e.^-(l30-mu30);
+ur35=(l35-mu35).*e.^-(l35-mu35);
+ur38=(l38-mu38).*e.^-(l38-mu38);
+plot(l20,ur20,'.',l30,ur30,'-',l35,ur35,'+',l38,ur38,'x');
 
 ## 
 #  Mesmo padrão, porém com deslocamento. Pode-se escolher, portanto, uma faixa

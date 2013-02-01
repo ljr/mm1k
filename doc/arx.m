@@ -18,37 +18,45 @@ out=dlmread ("identification.csv" ,";")
 run("/usr/share/octave/packages/control-2.4.1/@lti/dcgain.m")
 
 
-t=csvread("oct")
+t=csvread("02-results/r-29_32.csv");
+t=csvread("02-results/r-29_35.csv");
+t=csvread("02-results/r-29_41.csv");
 
 yp=t(:,2);
-size(yp)
-
-up=t(:,3);
-size(up)
+up=t(:,5);
 
 mu = mean(up(1:end-1))
 my = mean(yp(2:end))
 u = up - mu;
-size(u)
 y = yp - my;
-size(y)
 
 H = [y(1:end-1) u(1:end-1)];
-size(H)
-size(y(2:end))
-
 T = H\y(2:end)
 
-
 yhat = T(1)*y(1:end-1) + T(2)*u(1:end-1);
-plotyy(out(:,1),out(:,2),out(:,1),out(:,4))
-plot(y(2:end),yhat, ' * ',y,y,' -')
-
-
 rmse=sqrt(sum(power(y(2:end) - yhat, 2))/size(yhat)(1))
 r2=1-(var(y(2:end)-yhat)/var(y(2:end)))
 
+plot(y(2:end),yhat, ' * ',y,y,' -')
+
+print -color -deps 04-coef_29_32.eps
+a 0.96486 b -4.87183
+
+print -color -deps 04-coef_29_35.eps
+a 0.97072 b -1.16624
+
+print -color -deps 04-coef_29_41.eps
+a 0.97395 b -0.87718
+
+
+
+plotyy(out(:,1),out(:,2),out(:,1),out(:,4))
+
+
+#rmse=sqrt(sum(power(y(2:end) - yhat, 2))/size(yhat)(1))
+#r2=1-(var(y(2:end)-yhat)/var(y(2:end)))
+
 mm1=tf(T(2),[1 T(1)], 300)
-impulse(mm1,2000)
 step(mm1,2000)
+impulse(mm1,2000)
 
