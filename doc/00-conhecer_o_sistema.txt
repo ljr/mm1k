@@ -37,7 +37,10 @@ mr30=(mu30)./(1.-(mu30./l30));
 mr35=(mu35)./(1.-(mu35./l35));
 mr38=(mu38)./(1.-(mu38./l38));
 plot(l20,mr20,'.',l28,mr28,'-',l30,mr30,'*',l35,mr35,'+',l38,mr38,'x');
-print -color -deps foo.eps
+xlabel ("Intervalo entre as chegadas");
+ylabel ("Tempo de resposta medio");
+legend("Reqs. = 20", "Reqs. = 28", "Reqs. = 30", "Reqs. = 35", "Reqs. = 38")
+print -color -deps 04-conhecendo.eps
 
 ## tempo de resposta considerando FIFO e t=1 (TODO: fazer gráfico 3D)
 ur20=(l20-mu20).*e.^-(l20-mu20);

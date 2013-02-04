@@ -1,6 +1,6 @@
 #include <queuing.h>
 	#include "window.h"
-#include <stdlib.h> // atoi, atof and friends...
+#include <cstdlib> // atoi, atof and friends...
 #include <assert.h>
 
 #define DELIM ","
@@ -41,7 +41,7 @@ Window *response_time;
 int response_time_size;
 double mean_service;
 double change;
-float step;
+double step;
 Window *utilization;
 
 
@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 	utilization = new Window(response_time_size); // TODO: SHOULD CREATE A SPECIFIC PARAMETER FOR THIS? I THINK NOT.
 	change = atof(argv[8]);
 	step = atof(argv[9]);
+	cout << "step: " << step << "text: " << argv[9] << endl;
 
 	new Future(LINKED);
 	fqueue = new Facility("queue");
@@ -111,6 +112,7 @@ void Change()
 	Token chang  = Future::CurrentToken();
 	Future::UpdateArrivals();
 	arrival_rate += step;
+	cout << "!!!!!!!!!!new arrival value: " << arrival_rate << "step: " << step << endl;
 }
 
 

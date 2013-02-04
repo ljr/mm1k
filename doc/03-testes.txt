@@ -3,7 +3,7 @@
 
 
 rm -Rf results/
-./run-test.sh 300000 28 300 30.632 1 100000 -2
+./run-test.sh 300000 28 300 30.632 1 100000 −1.1583
 rm -Rf results/
 ./run-test.sh 300000 28 300 34.44 1 100000 -4.718
 rm -Rf results/
@@ -19,7 +19,7 @@ print -color -deps 05-test-30.eps
 
 
 t34=csvread("03-test/rtest-34.44-28.csv");
-T34 = [0.97163 -1.14608];
+T34 = [-0.97163 -1.14608];
 TF34=tf(T34(2),[1 T34(1)], 300)
 [y34 tt34 x34] = step(TF34*-4.718,200000);
 [x,h1,h2] = plotyy(tt34.+100000,y34,t34(:,1),t34(:,3:4));
@@ -47,13 +47,24 @@ print -color -deps 05-test-35.eps
 ./test 10 11 300000 28 300 31 150 100000 -2 2>/tmp/t.csv
 t=csvread ("/tmp/t.csv");[x,h1,h2] = plotyy(t(:,1),t(:,3), t(:,1),t(:,2))
 axis(x(2), [0 300000 28 32])
-print -color -deps foo.eps
+set (h2, 'LineStyle', '-.')
+xlabel ("Tempo de simulacao (s)")
+ylabel(x(1), "Tempo de resposta (s)")
+ylabel(x(2), "Tempo medio entre as chegadas (s)")
+legend("Tempo medio entre as chegadas","Tempo de resposta")
+print -color -deps 04-estoca-1.eps
+
 #estocasticos, várias execuções
 ./run-test.sh 300000 28 300 31 150 100000 -2 
 c=csvread ("t.oct");
 [x,h1,h2] = plotyy(c(:,1), c(:,2:3),t(:,1),t(:,2))
+set (h2, 'LineStyle', '-.')
 axis(x(2), [0 300000 28 32])
-print -color -deps foo.eps
+xlabel ("Tempo de simulacao (s)")
+ylabel(x(1), "Tempo medio de resposta (s)")
+ylabel(x(2), "Tempo medio entre as chegadas (s)")
+legend([h1; h2], "Intervalo max.", "Intervalo min.", "Tempo medio entre as chegadas")
+print -color -deps 04-estoca-2.eps
 
 
 

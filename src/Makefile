@@ -24,5 +24,5 @@ $(TEST): $(OBJT)
 	$(CPP) $(CPPFLAGS) -o $(TEST) $(SRCT) $(LIB)
 
 clean: 
-	rm -f *.o $(PROG)
+	rm -f *.o $(PROG) $(TEST)
 

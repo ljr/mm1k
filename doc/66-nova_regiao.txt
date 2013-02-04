@@ -1,0 +1,100 @@
+--------------------------------------------------------------------------------
+35-39:  5 -> 2.5 + 35 = 37.5, 0.0667
+
+#shell 87500
+rm -Rf results/
+./run.sh 300000 28 300 37.5 .0667 10000 1 87500
+cp t.oct 02-results/r-35_39.csv
+
+rm -Rf results/
+./run-test.sh 300000 28 300 37.720 1 100000 -5.47
+
+#octave
+t=csvread ("02-results/r-35_39.csv");
+[x,h1,h2]=plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5));
+xlabel("Tempo de simulacao (s)")
+ylabel(x(1),"Tempo de resposta (s)")
+ylabel(x(2),"Tempo medio entre as chegadas (s)")
+legend([h1; h2], "Intervalo min.", "Intervalo max.", "Tempo medio entre as chegadas")
+set(h2,'color','cyan')
+print -color -deps 04-exp_r-35_40.eps
+
+h=plot(t(:,5),t(:,2),'.');
+ylabel ("Tempo de resposta (s)")
+xlabel("Tempo medio entre as chegadas (s)")
+print -color -deps 04-exp_range-r-35_40.eps
+
+h=plot(y(2:end),yhat, ' * ',y,y,' -')
+xlabel("Valores medidos")
+ylabel("Valores preditos")
+legend("Valores experimentais", "Valores do modelo")
+print -color -deps 04-coef_35_40.eps
+
+
+
+t30=csvread("03-test/rtest-37.720-28.csv");
+--------------------------------------------------------------------------------
+29-30:  1 -> 0.5 + 29 = 29.5, 0.0170
+
+#shell
+rm -Rf results/
+./run.sh 300000 28 300 29.5 0.0170 100 1 87500
+cp t.oct 02-results/r-29x_30x.csv
+
+rm -Rf results/
+./run-test.sh 300000 28 300 29.543 1 100000 -.543
+
+#octave
+t=csvread ("02-results/r-29x_30x.csv");
+t30=csvread("03-test/rtest-29.543-28.csv");
+--------------------------------------------------------------------------------
+
+yp=t(:,2);
+up=t(:,5);
+mu = mean(up(1:end-1))
+my = mean(yp(2:end))
+u = up - mu;
+y = yp - my;
+
+H = [y(1:end-1) u(1:end-1)];
+T = H\y(2:end)
+
+yhat = T(1)*y(1:end-1) + T(2)*u(1:end-1);
+rmse=sqrt(sum(power(y(2:end) - yhat, 2))/size(yhat)(1))
+r2=1-(var(y(2:end)-yhat)/var(y(2:end)))
+
+stepsize=-2
+
+ssb=repmat(28/(1-28/mu),1,size(t(:,1))(1)/3);
+ssa=repmat(28/(1-28/(mu+stepsize)),1,2*size(t(:,1))(1)/3);
+ss = [0 ssb ssa];
+
+predmyb=repmat(my,1,size(t(:,1))(1)/3);
+uss=mu+stepsize;a=T(1); b=T(2);
+predmya=repmat(abs((b/(1-a))*uss),1,2*size(t(:,1))(1)/3);
+yss=[0 predmyb predmya];
+
+mm1=tf(T(2),[1 T(1)], 300);
+
+plot(t(:,1),[ss' yss'])
+plotyy(t(:,1),t(:,3:4),t(:,1),t(:,5));
+clf;plot(t(:,5),t(:,2),'.');
+plot(y(2:end),yhat, ' * ',y,y,' -')
+
+
+clf;step(mm1*-8,20000)
+
+
+-------------------- Train.
+
+
+[y35 tt35 x35] = step(mm1*-2,200000);
+ival=repmat(my,1,size(t(:,1))(1)/3);
+#my35=(y35.+my).*(1.+y35);
+my35=(y35.+my);
+pred=[ival my35'];
+
+plot(tt(:,1), [tt(:,2:4) ss' yss' pred']);
+
+
+

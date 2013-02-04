@@ -21,6 +21,7 @@ run("/usr/share/octave/packages/control-2.4.1/@lti/dcgain.m")
 t=csvread("02-results/r-29_32.csv");
 t=csvread("02-results/r-29_35.csv");
 t=csvread("02-results/r-29_41.csv");
+t=csvread("02-results/r-35_40.csv");
 
 yp=t(:,2);
 up=t(:,5);
@@ -38,6 +39,11 @@ rmse=sqrt(sum(power(y(2:end) - yhat, 2))/size(yhat)(1))
 r2=1-(var(y(2:end)-yhat)/var(y(2:end)))
 
 plot(y(2:end),yhat, ' * ',y,y,' -')
+xlabel("Valores medidos")
+ylabel("Valores preditos")
+legend("Valores experimentais", "Valores do modelo")
+
+
 
 
 print -color -deps 04-coef_29_32.eps
@@ -55,6 +61,8 @@ mu =  35.528 my =  219.43
 a 0.97627 b -0.80957
 rmse =  7.2492 r2 =  0.99712
 
+print -color -deps 04-coef_35_40.eps
+
 
 
 plotyy(out(:,1),out(:,2),out(:,1),out(:,4))
@@ -66,4 +74,15 @@ plotyy(out(:,1),out(:,2),out(:,1),out(:,4))
 mm1=tf(T(2),[1 T(1)], 300)
 step(mm1,2000)
 impulse(mm1,2000)
+
+
+ssb=repmat(28/(1-28/34.44),1,size(t34(:,1))(1)/3);
+ssa=repmat(28/(1-28/(34.44-4.718)),1,2*size(t34(:,1))(1)/3);
+ss = [0 ssb ssa];
+
+predmyb=repmat(233.11,1,size(t34(:,1))(1)/3);
+uss=34.44-4.718;a=0.97163; b=-1.14608;
+predmya=repmat((b/(1-a))*uss,1,2*size(t34(:,1))(1)/3);
+yss=[0 predmyb predmya];
+
 

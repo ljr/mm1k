@@ -1,0 +1,45 @@
+#02-results/r-29_32.csv
+#02-results/r-29_35.csv
+#02-results/r-29_41.csv
+
+
+t=csvread ("02-results/r-35_39.csv");
+tt=csvread("03-test/rtest-37.720-28.csv");
+dat = iddata (t(:,2), t(:,5), 300);
+[sys, x0] = arx (dat, 1);
+#[stepy stept stepx] = step(sys,tt(:,1));
+[stepy stept stepx] = step(sys*32.25,tt(:,1));
+#pred=[repmat(x0,333,1)' ((stepy(1:667).+x0).*(1.+stepy(1:667)))'];
+pred=[repmat(x0,333,1)' (stepy(1:667).+x0)'];
+plot(tt(:,1),[tt(:,2:4) pred'])
+
+
+
+tI=csvread ("02-results/r-29_32.csv");
+tII=csvread ("02-results/r-29_35.csv");
+tIII=csvread ("02-results/r-29_41.csv");
+
+datI = iddata (tI(:,2), tI(:,5), 300);
+datII = iddata (tII(:,2), tII(:,5), 300);
+datIII = iddata (tIII(:,2), tIII(:,5), 300);
+#plot(datII)
+
+[sysI, x0I] = arx (datI, 1);
+[sysII, x0II] = arx (datII, 1);
+[sysIII, x0III] = arx (datIII, 1);
+
+
+[stepyI steptI stepxI] = step(sysI,tI(:,1));
+[stepyII steptII stepxII] = step(sysII,tI(:,1));
+[stepyIII steptIII stepxIII] = step(sysIII,tI(:,1));
+
+predI=[repmat(x0I/100,333,1)' ((stepyI(1:667).+x0I/100).*(1.+stepyI(1:667)))'];
+predII=[repmat(x0II/100,333,1)' ((stepyII(1:667).+x0II/100).*(1.+stepyII(1:667)))'];
+predIII=[repmat(x0III/100,333,1)' ((stepyIII(1:667).+x0III/100).*(1.+stepyIII(1:667)))'];
+
+plot(tt(:,1),[tt(:,2:4) predI'])
+plot(tt(:,1),[tt(:,2:4) predII'])
+plot(tt(:,1),[tt(:,2:4) predIII'])
+
+
+

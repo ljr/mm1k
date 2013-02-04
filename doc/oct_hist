@@ -1,0 +1,53 @@
+
+tt=csvread ("03-test/rtest-30.632-28.csv");
+G=tf(-4.87183, [1 -0.96486], 300);
+[stepy stept stepx] = step(G*-1.1583+377.15,200000);
+pred=[repmat(377.15,333,1)' stepy(1:667)'];
+[x h1 h2]=plotyy(tt(:,1),[tt(:,3:4) pred'], tt(:,1), tt(:,5));
+set (h2, 'LineStyle', '-.');
+set(h2,'color','cyan');
+xlabel ("Tempo de simulacao (s)");
+ylabel(x(1), "Tempo medio de resposta (s)");
+ylabel(x(2), "Tempo medio entre as chegadas (s)");
+legend([h1; h2], "Intervalo min.", "Intervalo max.", "Valor predito", "location", "southeast");
+print -color -deps 99-test-2935.eps
+
+tt=csvread ("03-test/rtest-34.440-28.csv");
+G=tf(-1.16624, [1 -0.97072], 300);
+[stepy stept stepx] = step(G*-4.9663+231.69,200000);
+pred=[repmat(231.69,333,1)' stepy(1:667)'];
+[x h1 h2]=plotyy(tt(:,1),[tt(:,3:4) pred'], tt(:,1), tt(:,5));
+set (h2, 'LineStyle', '-.');
+set(h2,'color','cyan');
+xlabel ("Tempo de simulacao (s)");
+ylabel(x(1), "Tempo medio de resposta (s)");
+ylabel(x(2), "Tempo medio entre as chegadas (s)");
+legend([h1; h2], "Intervalo min.", "Intervalo max.", "Valor predito", "location", "southeast");
+print -color -deps 99-test-2935.eps
+
+tt=csvread ("03-test/rtest-35.528-28.csv");
+G=tf(-.87718, [1 -0.97395], 300);
+[stepy stept stepx] = step(G*-6.0543+218.47,200000);
+pred=[repmat(218.47,333,1)' stepy(1:667)'];
+[x h1 h2]=plotyy(tt(:,1),[tt(:,3:4) pred'], tt(:,1), tt(:,5));
+set (h2, 'LineStyle', '-.');
+set(h2,'color','cyan');
+xlabel ("Tempo de simulacao (s)");
+ylabel(x(1), "Tempo medio de resposta (s)");
+ylabel(x(2), "Tempo medio entre as chegadas (s)");
+legend([h1; h2], "Intervalo min.", "Intervalo max.", "Valor predito", "location", "southeast");
+print -color -deps 99-test-2941.eps
+
+tt=csvread ("03-test/rtest-37.720-28.csv");
+G=tf(-2.69454, [1 -0.64910], 300);
+[stepy stept stepx] = step(G*-8.2463+131.60,200000);
+pred=[repmat(131.6,333,1)' stepy(1:667)'];
+[x h1 h2]=plotyy(tt(:,1),[tt(:,3:4) pred'], tt(:,1), tt(:,5));
+set (h2, 'LineStyle', '-.');
+set(h2,'color','cyan');
+xlabel ("Tempo de simulacao (s)");
+ylabel(x(1), "Tempo medio de resposta (s)");
+ylabel(x(2), "Tempo medio entre as chegadas (s)");
+legend([h1; h2], "Intervalo min.", "Intervalo max.", "Valor predito", "location", "southeast");
+print -color -deps 99-test-3540.eps
+
