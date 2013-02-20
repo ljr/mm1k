@@ -10,7 +10,7 @@ xlabel ("Tempo de simulacao (s)");
 ylabel(x(1), "Tempo medio de resposta (s)");
 ylabel(x(2), "Tempo medio entre as chegadas (s)");
 legend([h1; h2], "Intervalo min.", "Intervalo max.", "Valor predito", "location", "southeast");
-print -color -deps 99-test-2935.eps
+print -color -deps 99-test-2932.eps
 
 tt=csvread ("03-test/rtest-34.440-28.csv");
 G=tf(-1.16624, [1 -0.97072], 300);
