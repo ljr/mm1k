@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
 	Future::Schedule(SAMPLING, sample_time, sample);
 	Future::Schedule(CHANGE_MEAN_ARRIVAL, change_arrival_rate, change);
 
-//	while (!done) {
 	while (Future::SimTime() < deadline) {
 		Estatus es = Future::NextEvent();
 		switch (es.event_id) {
@@ -182,7 +181,6 @@ void RlsSrvr()
 	last_response_time = Future::SimTime() - pl->arrival_time;
 	response_time->insertValue(last_response_time);
 
-//      done = who == nreq;
         fqueue->Release(who);
         Future::UpdateDepartures();
 }
