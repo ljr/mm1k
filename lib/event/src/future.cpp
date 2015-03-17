@@ -54,7 +54,7 @@ Constructor
 Future::Future (
                 Lspecies fff,
                 void (*GeneratorFn) (),
-                char * fn_descr,
+                char const * fn_descr,
                 SchedOrExec s_or_e,
                 Boolean want_snapshots,
                 Boolean inter_activ,
@@ -298,7 +298,7 @@ void Future::Schedule (int event_id, double inter_time, Token tkn)
   }
 
 void Future::Schedule (void (*fn) (), double inter_time, Token tkn,
-                       char * fn_descr)
+                       char const * fn_descr)
   {
   if ( ! future_ptr) ErrXit (9073, "No future");
   Event eee (fn, fn_descr);
@@ -529,7 +529,7 @@ The code for the Display() fn in the various derived classes is in linked.cpp,
 heap.cpp, etc.
 -----------------------------------------------------------------------------*/
 
-void Future::Display (char * title)
+void Future::Display (char const * title)
   {
   if ( ! future_ptr) ErrXit (9084, "No future");
   if ( ! event_list) ErrXit (9085, "NULL event_list");
@@ -775,7 +775,7 @@ void Future::ResetIOattribs ()
 Based on trace_update()
 -----------------------------------------------------------------------------*/
 
-void Future::Snapshot (char * msg)
+void Future::Snapshot (char const * msg)
   {
   if ( ! future_ptr) ErrXit (9096, "No future");
   if (interactive) // Refresh screen
@@ -831,7 +831,7 @@ Several variants of the function exist.  The compiler distinguishes them based
 on their parameter list.  (This is the idea of "name mangling" in c++).
 -----------------------------------------------------------------------------*/
 
-void Future::FutMsg (char * msg, char * fn_desc, double intrvl, int tkn_id)
+void Future::FutMsg (char const * msg, char * fn_desc, double intrvl, int tkn_id)
   {
   char fig [BFR_SIZ+1];
   int ii;
@@ -843,7 +843,7 @@ void Future::FutMsg (char * msg, char * fn_desc, double intrvl, int tkn_id)
   Snapshot (fig);
   }
 
-void Future::FutMsg (char * msg, int event_id, int tkn_id)
+void Future::FutMsg (char const * msg, int event_id, int tkn_id)
   {
   char fig [BFR_SIZ+1];
   int ii;
@@ -854,7 +854,7 @@ void Future::FutMsg (char * msg, int event_id, int tkn_id)
   Snapshot (fig);
   }
 
-void Future::FutMsg (char * msg, int event_or_token_id)
+void Future::FutMsg (char const * msg, int event_or_token_id)
   {
   char fig [BFR_SIZ+1];
   int ii;
@@ -864,7 +864,7 @@ void Future::FutMsg (char * msg, int event_or_token_id)
   Snapshot (fig);
   }
 
-void Future::FutMsg (char * msg, char * fn_desc)
+void Future::FutMsg (char const * msg, char * fn_desc)
   {
   char fig [BFR_SIZ+1];
   int ii;

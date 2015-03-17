@@ -23,8 +23,8 @@ class Event : public Token
 
     // Constructors: some parameters optional, defaults as shown.
     Event(int et=0,      double ttt=0.0, int ppp=0);
-    Event(void (*ff) (), double ttt=0.0, int ppp=0, char * fn_descr = "");
-    Event(void (*ff) (), char * fn_descr);
+    Event(void (*ff) (), double ttt=0.0, int ppp=0, char const * fn_descr = "");
+    Event(void (*ff) (), char const * fn_descr);
 
     ~Event(); // destructor
 
@@ -74,7 +74,7 @@ struct Estatus
   Estatus () {rtncod = ES_UNKNOWN; now = 0.0;
               fn = NULL; event_id = -1; descr [0] = 0; }
 
-  char * ReturnCodeString (void);
+  char const * ReturnCodeString (void);
   void   ES_DisplayReturnCode (void);
   void   ES_Display (void);
 

@@ -66,7 +66,7 @@ int Facility::GetAnAvailable (char * Name, int nsrvrs)
 Facility constructor.  # of servers defaults to 1 if not specified.
 -----------------------------------------------------------------------------*/
 
-Facility::Facility (char * ccc, int nnn, int fac_id)
+Facility::Facility (char const * ccc, int nnn, int fac_id)
   {
   if (nnn < 1) ErrXit (9042, "Bad nnn");
   total_servers = nnn;
@@ -568,7 +568,7 @@ Several variants of the function exist.  The compiler distinguishes them based
 on their parameter list.  (This is the idea of "name mangling" in c++).
 -----------------------------------------------------------------------------*/
 
-void Facility::FacMsg (char * stg, int tkn, int pri)
+void Facility::FacMsg (char const * stg, int tkn, int pri)
   {
   char fig [BFR_SIZ+1];
   int ii;
@@ -580,7 +580,7 @@ void Facility::FacMsg (char * stg, int tkn, int pri)
   Future::Snapshot (fig);
   }
 
-void Facility::FacMsg (char * stg, int tkn)
+void Facility::FacMsg (char const * stg, int tkn)
   {
   char fig [BFR_SIZ+1];
   int ii;

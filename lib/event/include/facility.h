@@ -26,7 +26,7 @@ class Facility
   {
   public:
 
-    Facility (char * name = "", int n_srvrs = 1, int fac_id = -1);
+    Facility (char const * name = "", int n_srvrs = 1, int fac_id = -1);
     ~Facility();  // destructor unlinks facility from flist
                   // but is unsupported in this release
     FacStatus Request (Token tkn, int pri = 0);
@@ -57,8 +57,8 @@ class Facility
 
   protected: // methods
 
-    void FacMsg (char * stg, int tkn_id, int pri);
-    void FacMsg (char * stg, int tkn_id);
+    void FacMsg (char const * stg, int tkn_id, int pri);
+    void FacMsg (char const * stg, int tkn_id);
     static void RemoveAll (void);
 
   protected: // data

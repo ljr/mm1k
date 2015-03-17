@@ -275,7 +275,7 @@ void Leftist::Display (int mode)
 Potected recursive mbr method.  visit root, traverse lson, traverse rson.
 ----------------------------------------------------------------------------*/
 
-void Leftist::Lnode::Picture (int level, char * stg)
+void Leftist::Lnode::Picture (int level, char const * stg)
   {
 
   int ii;

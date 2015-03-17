@@ -2,18 +2,18 @@
 #
 
 PROG = identification
-SRC = identification.cpp window.cpp window.h
+SRC = identification.cpp window.cpp window.h config.cpp
 OBJ = $(patsubst %.cpp,%.o,$(SRC))
 
-TEST = test/test
-SRCT = test/test.cpp window.cpp window.h
+TEST = test/test_window
+SRCT = test/test_window.cpp window.cpp window.h
 OBJT = $(patsubst %.cpp,%.o,$(SRCT))
 
 LIB = ./lib/simpack.a ./lib/cjson.a
 INCLUDE = ../include
 
 CPP = g++
-CPPFLAGS = -lm -I$(INCLUDE)
+CPPFLAGS = -lm -I$(INCLUDE) -Wno-deprecated 
 
 all: $(PROG) $(TEST)
 

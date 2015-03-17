@@ -12,7 +12,7 @@ estatus.cpp
 Returns a string.  String is static literal.
 -----------------------------------------------------------------------------*/
 
-char * Estatus::ReturnCodeString ()
+char const * Estatus::ReturnCodeString ()
   {
   switch (rtncod)
     {

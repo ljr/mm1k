@@ -24,7 +24,7 @@ void DynAllocFail ()
 /*=============================================================================
 -----------------------------------------------------------------------------*/
 
-void ErrXit (int errnum, char * stg1)
+void ErrXit (int errnum, char const * stg1)
   {
   if (errnum > 0) // can exit without error # prefix if prefix is 0.
     cout << "FATAL ERROR #" << setw(4) << errnum << ' ';

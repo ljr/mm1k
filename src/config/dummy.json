@@ -1,0 +1,11 @@
+{
+	"seeds" : [11, 20],
+	"total_execution_time" : 72000,
+	"mean_service_time" : 28,
+	"sample_time" : 300,
+	"mean_sin_wave" : 40,
+	"sin_amplitude" : 0.05,
+	"changes_in_wave_period" : 42,
+	"window_size" : 10,
+	"sin_wave_period" : 2100
+}

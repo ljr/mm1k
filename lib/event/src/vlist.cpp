@@ -42,7 +42,7 @@ Vlist * Vlist::Constructor (Lspecies fel_type)
 /*=============================================================================
 -----------------------------------------------------------------------------*/
 
-char * Vlist::ListType ()
+char const * Vlist::ListType ()
   {
   switch (i_am)
     {
@@ -59,7 +59,7 @@ char * Vlist::ListType ()
 /*=============================================================================
 -----------------------------------------------------------------------------*/
 
-char * Vlist::InsertionPoint (InsertWhere here)
+char const * Vlist::InsertionPoint (InsertWhere here)
   {
   switch (here)
     {

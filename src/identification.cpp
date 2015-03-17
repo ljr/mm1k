@@ -24,6 +24,20 @@ struct Payload {
 struct Payload *new_payload(double arrival);
 
 
+// configuration imported by json
+struct Configuration {
+	int *seeds;
+	double total_execution_time;
+	double mean_service_time;
+	double sample_time;
+	double mean_sine_wave;
+	double sine_amplitude;
+	int changes_in_wave_period;
+	int response_time_window_size;
+	double sine_wave_period;
+};
+
+
 // event functions
 void Sampling();
 void ChangeArrival();
@@ -55,12 +69,6 @@ Window *utilization;
 
 int main(int argc, char *argv[])
 {
-	if (argc != 11) {
-		cout << "Usage:\n\t" <<  argv[0] << " 1seed 2seed 3n_requests(simtime) 4mean_service 5sample_time 6mean_sin_wave 7amplitude 8changes_in_wave_period 9rt_window_size 10sine_wave_period" << endl;
-		cout << "Example:\n\t" <<  argv[0] << " 10 10 72000 28 300 40 .05 42 10 2100" << endl;
-		cout << "Passed " << argc << " arguments." << endl;
-		return 1;
-	}
 
 	s1 = atol(argv[1]);
 	s2 = atol(argv[2]);
@@ -153,13 +161,10 @@ void Arrive()
 
 	Future::Schedule(REQUEST_SERVER, 0.0, customer);
 
-//	if (req < nreq) { // XXX: now for a period of time.
 	customer.Id(customer.Id() + 1);
 	customer.SetPbox(new_payload(Future::SimTime()));
 	stream(1);
 	Future::Schedule(ARRIVAL, expntl(arrival_rate), customer);
-//		req++;
-//	}
 }
 
 void RqstSrvr()

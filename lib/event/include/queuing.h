@@ -16,7 +16,8 @@ simpack's queuing.h, by including the cAPI prototype declarations.
     #include <iostream>  // cin, cout, etc
     #include <iomanip>   // manipulators (see tc++ug p192)
     #include <fstream>   // ifstream, etc
-    #include <strstream> // istrstream, ostrstream
+    #include <strstream> // ostrstream
+    //#include <sstream>   // basic_istringstream, basic_ostringstream
     #include <stdlib.h>    // exit()
     #include <string.h>    // strcmp()
     #include <stdio.h>     // printf(), scanf()
@@ -59,7 +60,7 @@ using namespace std;
 // Fn prototype declarations for NON-API fns:
 //
     void DynAllocFail(void); // registered by call to set_new_handler()
-    void ErrXit(int errnum, char * description);
+    void ErrXit(int errnum, char const * description);
     Token ConvertTOKENtoToken (TOKEN old_style_tkn);
 
 // SimPack-compatible c-language API:

@@ -34,7 +34,7 @@ class Future // there's at most 1 object of this class in existence at a time
   Future ( // constructor
           Lspecies FEL_type = LINKED,
           void (*event_routine) () = NULL,
-          char * event_routine_description = "",
+          char const * event_routine_description = "",
           SchedOrExec schedule_or_execute = SCHEDULE_THIS_FN,
           Boolean want_snapshots = NO,
           Boolean inter_activ = NO,
@@ -68,7 +68,7 @@ class Future // there's at most 1 object of this class in existence at a time
          double time_interval, Token tkn);
 
     static void Schedule (void (*event_routine)(),
-         double time_interval, Token tkn, char * event_routine_descr = "");
+         double time_interval, Token tkn, char const * event_routine_descr = "");
 
   // There are 3 ways to cause event occurrence in sim++.  The automatic
   // method is done with the constructor above.  The remaining 2 occurrence
@@ -119,8 +119,8 @@ class Future // there's at most 1 object of this class in existence at a time
   // ReportStats() provides overall simulation statistics, usually at end
   // of run, but you may get periodic statistics if you like.
 
-    static void    Snapshot          (char * msg);
-    static void    Display           (char * title);
+    static void    Snapshot          (char const * msg);
+    static void    Display           (char const * title);
     static void    DisplayFEL        (int mode = 1);
     static void    ReportStats       (void);
 
@@ -139,10 +139,10 @@ class Future // there's at most 1 object of this class in existence at a time
 
   // Called from Snapshot to do output:
 
-    static void FutMsg (char * msg, char * fn_desc, double intrvl, int tkn_id);
-    static void FutMsg (char * msg, int event_id, int tkn_id);
-    static void FutMsg (char * msg, int event_or_token_id);
-    static void FutMsg (char * msg, char * fn_desc);
+    static void FutMsg (char const * msg, char * fn_desc, double intrvl, int tkn_id);
+    static void FutMsg (char const * msg, int event_id, int tkn_id);
+    static void FutMsg (char const * msg, int event_or_token_id);
+    static void FutMsg (char const * msg, char * fn_desc);
 
   // These operations on future event list (FEL) are called from within the
   // class and from friend class Facility.

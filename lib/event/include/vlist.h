@@ -54,7 +54,7 @@ in base class.
 /// Fn prototype, may be able to elim by judicious rearrangement of .h files.
 /// Leave that for some other time.
 
-     void ErrXit (int, char *);
+     void ErrXit (int, char const *);
 
 
 
@@ -73,8 +73,8 @@ class Vlist
     int Size (void) {return size; }
     Boolean Empty (void) {return (size < 1); }
     int HiWtrMark (void) {return hi_wtr_mark; }
-    char * ListType (void);                    // eg, "Heap"
-    char * InsertionPoint (InsertWhere here);  // eg, "AT_REAR"
+    char const * ListType (void);                    // eg, "Heap"
+    char const * InsertionPoint (InsertWhere here);  // eg, "AT_REAR"
 
     virtual void  Insert (Event item, int where)
       {cout << "I2423 Not implemented\n"; if (where>item.Id()) ; }
@@ -192,7 +192,7 @@ class Leftist : public Vlist
       public:
 
         Lnode () : Event () { lson = rson = NULL; dist = 1; } // constructor
-        void Picture (int level, char * stg);
+        void Picture (int level, char const * stg);
         static int Dista (Lnode * ptr) { if (ptr) return ptr->dist; return 0; }
         static void Clear (Lnode * ptr);
         int dist;             // data

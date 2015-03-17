@@ -32,7 +32,7 @@ Event::Event (int et, double ttt, int ppp)
 
   }//end fn
 
-Event::Event (void (*func) (), double ttt, int ppp, char * fds)
+Event::Event (void (*func) (), double ttt, int ppp, char const * fds)
   {
   serialnumber = ++created;
   time = ttt;
@@ -52,7 +52,7 @@ Event::Event (void (*func) (), double ttt, int ppp, char * fds)
 
 
 
-Event::Event (void (*func) (), char * fds)
+Event::Event (void (*func) (), char const * fds)
   {
   serialnumber = ++created;
   time = 0.0;
