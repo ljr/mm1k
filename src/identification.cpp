@@ -1,8 +1,10 @@
 #include <event/queuing.h>
-#include "window.h"
 #include <stdlib.h> // atoi, atof and friends...
 #include <math.h>
 #define _USE_MATH_DEFINES
+
+#include "window.h"
+#include "config.h"
 
 #define DELIM ","
 
@@ -25,18 +27,17 @@ struct Payload *new_payload(double arrival);
 
 
 // configuration imported by json
-struct Configuration {
-	int *seeds;
+typedef struct {
 	double total_execution_time;
 	double mean_service_time;
 	double sample_time;
 	double mean_sine_wave;
 	double sine_amplitude;
+	double sine_wave_period;
 	int changes_in_wave_period;
 	int response_time_window_size;
-	double sine_wave_period;
-};
-
+} Configuration;
+Configuration conf;
 
 // event functions
 void Sampling();
@@ -46,22 +47,14 @@ void RqstSrvr();
 void RlsSrvr();
 
 // flow control
-double deadline;
 int req = 1;
 double arrival_rate;
 
 // metrics
-double sample_time; // double: to pass to Future::Schedule
 double change_arrival_rate;
 double last_response_time;
 double last_utilization = .0;
 Window *response_time; 
-int response_time_size;
-double mean_service;
-float mean_sin_wave;
-float amplitude;
-int changes_in_wave_period;
-float sine_wave_period;
 float b = 0.0;
 float step;
 Window *utilization;
@@ -69,22 +62,37 @@ Window *utilization;
 
 int main(int argc, char *argv[])
 {
+	if (argc != 4) {
+		cerr << "Usage:\n\t" << argv[0] << 
+			"seed1 seed2 config.json" << endl;
+		return 1;
+	}
 
 	s1 = atol(argv[1]);
 	s2 = atol(argv[2]);
-	deadline = atof(argv[3]);
-	mean_service = atof(argv[4]);
-	sample_time = atof(argv[5]);
-	mean_sin_wave = atof(argv[6]);
-	arrival_rate = mean_sin_wave;
-	amplitude = mean_sin_wave * atof(argv[7]);
-	changes_in_wave_period = atoi(argv[8]);
-	step = (2*M_PI) / (float) changes_in_wave_period;
-	response_time_size = atoi(argv[9]);
-	response_time = new Window(response_time_size);
-	utilization = new Window(response_time_size); // TODO: SHOULD CREATE A SPECIFIC PARAMETER FOR THIS? I THINK NOT.
-	sine_wave_period = atof(argv[10]);
-	change_arrival_rate = sine_wave_period / (float) changes_in_wave_period;
+	load_configuration(argv[3]);
+
+	conf.total_execution_time = 
+		json_getvalue("total_execution_time")->valuedouble;
+	conf.mean_service_time = 
+		json_getvalue("mean_service_time")->valuedouble;
+	conf.sample_time = json_getvalue("sample_time")->valuedouble;
+	conf.mean_sine_wave = json_getvalue("mean_sine_wave")->valuedouble;
+	conf.sine_amplitude = conf.mean_sine_wave * 
+		json_getvalue("sine_amplitude")->valuedouble;
+	conf.sine_wave_period = json_getvalue("sine_wave_period")->valuedouble;
+	conf.changes_in_wave_period = 
+		json_getvalue("changes_in_wave_period")->valueint;
+	conf.response_time_window_size = 
+		json_getvalue("response_time_window_size")->valueint;
+
+
+	arrival_rate = conf.mean_sine_wave;
+	step = (2*M_PI) / (float) conf.changes_in_wave_period;
+	response_time = new Window(conf.response_time_window_size);
+	// TODO: another parameter for utilization window size? I think not.
+	utilization = new Window(conf.response_time_window_size); 
+	change_arrival_rate = conf.sine_wave_period / (float) conf.changes_in_wave_period;
 
 	new Future(LINKED);
 	fqueue = new Facility("queue");
@@ -94,10 +102,10 @@ int main(int argc, char *argv[])
 
 	Token customer(1, new_payload(0.0)), change(0), sample(0);
 	Future::Schedule(ARRIVAL, 0.0, customer);
-	Future::Schedule(SAMPLING, sample_time, sample);
+	Future::Schedule(SAMPLING, conf.sample_time, sample);
 	Future::Schedule(CHANGE_MEAN_ARRIVAL, change_arrival_rate, change);
 
-	while (Future::SimTime() < deadline) {
+	while (Future::SimTime() < conf.total_execution_time) {
 		Estatus es = Future::NextEvent();
 		switch (es.event_id) {
 			case SAMPLING:
@@ -130,7 +138,7 @@ void Sampling()
 {
 	Token sample = Future::CurrentToken();
 	Future::UpdateArrivals();
-	Future::Schedule(SAMPLING, sample_time, sample);
+	Future::Schedule(SAMPLING, conf.sample_time, sample);
 
 	// sample utilization
 	utilization->insertValue(Future::getUtilization());
@@ -149,7 +157,7 @@ void ChangeArrival()
 	Future::UpdateArrivals();
 	Future::Schedule(CHANGE_MEAN_ARRIVAL, change_arrival_rate, change);
 
-	arrival_rate = mean_sin_wave + amplitude * sin(b);
+	arrival_rate = conf.mean_sine_wave + conf.sine_amplitude * sin(b);
 	b += step;
 
 }
@@ -172,7 +180,7 @@ void RqstSrvr()
 	Token customer = Future::CurrentToken();
 	if (fqueue->Request(customer) == FREE) {
 		stream(2);
-		double service_time = expntl(mean_service);
+		double service_time = expntl(conf.mean_service_time);
 		Future::Schedule(RELEASE_SERVER, service_time, customer);
 	}
 }
