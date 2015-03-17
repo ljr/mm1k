@@ -5,8 +5,8 @@ PROG = identification
 SRC = identification.cpp window.cpp window.h
 OBJ = $(patsubst %.cpp,%.o,$(SRC))
 
-TEST = test
-SRCT = test.cpp window.cpp window.h
+TEST = test/test_window
+SRCT = test/test_window.cpp window.cpp window.h
 OBJT = $(patsubst %.cpp,%.o,$(SRCT))
 
 LIB = ./lib/simpack.a

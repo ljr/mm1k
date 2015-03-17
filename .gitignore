@@ -4,7 +4,9 @@ src/identification
 src/test_window
 src/sinewave
 src/test
-/event/lib/simpack.a
+include/*
+lib/*
+event/lib/simpack.a
 src/results/
 src/t.oct
 a.out
