@@ -4,7 +4,8 @@ src/identification
 src/test_window
 src/sinewave
 src/test
-/event/lib/simpack.a
 src/results/
 src/t.oct
+lib/event/lib/simpack.a
+lib/event/lib/cjson.a
 a.out

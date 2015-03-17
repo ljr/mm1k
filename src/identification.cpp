@@ -1,4 +1,4 @@
-#include "queuing.h"
+#include <event/queuing.h>
 #include "window.h"
 #include <stdlib.h> // atoi, atof and friends...
 #include <math.h>

@@ -5,12 +5,12 @@ PROG = identification
 SRC = identification.cpp window.cpp window.h
 OBJ = $(patsubst %.cpp,%.o,$(SRC))
 
-TEST = test
-SRCT = test.cpp window.cpp window.h
+TEST = test/test
+SRCT = test/test.cpp window.cpp window.h
 OBJT = $(patsubst %.cpp,%.o,$(SRCT))
 
-LIB = ./lib/simpack.a
-INCLUDE = ../event/include/
+LIB = ./lib/simpack.a ./lib/cjson.a
+INCLUDE = ../include
 
 CPP = g++
 CPPFLAGS = -lm -I$(INCLUDE)

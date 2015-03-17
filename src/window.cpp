@@ -1,4 +1,3 @@
-
 #include "window.h"
 
 Window::Window(int size)
