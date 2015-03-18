@@ -8,5 +8,5 @@ src/test
 src/results/
 src/t.oct
 lib/event/lib/simpack.a
-lib/event/lib/cjson.a
+lib/cJSON/lib/cjson.a
 a.out
