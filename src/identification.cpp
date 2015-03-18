@@ -6,7 +6,9 @@
 #include "window.h"
 #include "config.h"
 
+
 #define DELIM ","
+
 
 // simpack
 Facility * fqueue = NULL;
@@ -19,6 +21,7 @@ enum EventId {
 };
 long s1, s2; // seed
 
+
 // payload to the token
 struct Payload {
 	double arrival_time; // simulation time token arrives
@@ -28,6 +31,7 @@ struct Payload *new_payload(double arrival);
 
 Configuration *conf;
 
+
 // event functions
 void Sampling();
 void ChangeArrival();
@@ -35,9 +39,11 @@ void Arrive();
 void RqstSrvr();
 void RlsSrvr();
 
+
 // flow control
 int req = 1;
 double arrival_rate;
+
 
 // metrics
 double change_arrival_rate;
@@ -53,7 +59,7 @@ int main(int argc, char *argv[])
 {
 	if (argc != 4) {
 		cerr << "Usage:\n\t" << argv[0] << 
-			"seed1 seed2 config.json" << endl;
+			" seed1 seed2 config.json" << endl;
 		return 1;
 	}
 
@@ -67,7 +73,8 @@ int main(int argc, char *argv[])
 	response_time = new Window(conf->response_time_window_size);
 	// TODO: another parameter for utilization window size? I think not.
 	utilization = new Window(conf->response_time_window_size); 
-	change_arrival_rate = conf->sine_wave_period / (float) conf->changes_in_wave_period;
+	change_arrival_rate = 
+		conf->sine_wave_period / (float) conf->changes_in_wave_period;
 
 	new Future(LINKED);
 	fqueue = new Facility("queue");
@@ -109,6 +116,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+
 void Sampling()
 {
 	Token sample = Future::CurrentToken();
@@ -126,6 +134,7 @@ void Sampling()
 			<< endl;
 }
 
+
 void ChangeArrival()
 {
 	Token change = Future::CurrentToken();
@@ -136,6 +145,7 @@ void ChangeArrival()
 	b += step;
 
 }
+
 
 void Arrive()
 {
@@ -150,6 +160,7 @@ void Arrive()
 	Future::Schedule(ARRIVAL, expntl(arrival_rate), customer);
 }
 
+
 void RqstSrvr()
 {
 	Token customer = Future::CurrentToken();
@@ -159,6 +170,7 @@ void RqstSrvr()
 		Future::Schedule(RELEASE_SERVER, service_time, customer);
 	}
 }
+
 
 void RlsSrvr()
 {
