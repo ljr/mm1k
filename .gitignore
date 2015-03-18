@@ -1,5 +1,6 @@
 *.o
 *.out
+*.swp
 src/identification
 src/test_window
 src/sinewave
